@@ -1907,7 +1907,7 @@ set +o pipefail
 		"1\n2\n3\n\n",
 	},
 	{
-		"read a <<< '\\\\'; echo $a",
+		`read a <<< '\\'; echo "$a"`,
 		"\\\n",
 	},
 	{
@@ -1923,7 +1923,7 @@ set +o pipefail
 		"linecontinuation\n",
 	},
 	{
-		"read -r a <<< '\\\\'; echo $a",
+		`read -r a <<< '\\'; echo "$a"`,
 		"\\\\\n",
 	},
 	{
@@ -2038,8 +2038,7 @@ var skipOnDarwin = regexp.MustCompile(`\bwc\b|touch -d @`)
 // mkfifo: very different by design
 // ln -s: requires linked path to exist, stat does not work well
 // ~root: username does not exist
-// \\\\: TODO
-var skipOnWindows = regexp.MustCompile(`chmod|mkfifo|ln -s|~root|\\\\`)
+var skipOnWindows = regexp.MustCompile(`chmod|mkfifo|ln -s|~root`)
 
 func skipFileReason(src string) string {
 	if runtime.GOOS == "darwin" && skipOnDarwin.MatchString(src) {
